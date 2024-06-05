@@ -35,6 +35,9 @@ const DataTable = ({data,heading,loading}) => {
                     <TableCell style={tableCellStyle}>
                         Status
                     </TableCell>
+                    <TableCell style={tableCellStyle} >
+                        Remarks
+                    </TableCell>
                 </TableRow>
             </TableHead>
             <TableBody style={tableBodyStyle}>
@@ -53,6 +56,7 @@ const DataTable = ({data,heading,loading}) => {
                                 <TableCell>{row.rewards.rewardPoints}</TableCell>
                                 <TableCell>{row.comments}</TableCell>
                                 <TableCell style={{color:getStatusColor(row.status)}}>{row.status}</TableCell>
+                                <TableCell>{row.remarks}</TableCell>
                             </TableRow>
                         ))
                     )

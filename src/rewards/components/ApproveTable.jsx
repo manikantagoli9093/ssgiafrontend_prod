@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, Button } from '@mui/material'
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -9,6 +9,7 @@ const ApproveTable = ({data,heading,loading}) => {
   const empId=localStorage.getItem('empId');
   const BASE_URL=localStorage.getItem('BASE_URL');
   const empName=localStorage.getItem('empName')
+  const [rejectReason,setRejectReason]=useState('')
 
   const handleApprove = (id) => {
     const headers={
@@ -28,11 +29,21 @@ const ApproveTable = ({data,heading,loading}) => {
   };
   const handleReject = (id) => {
     // Send a PUT request with the approval status set to false
+    let remarks = null; // Initialize reason to null
+  while (remarks === null || remarks.trim() === '') { // Loop until a valid reason is provided
+    remarks = prompt('Enter reject reason:');
+    if (remarks === null) { // Check if user clicked cancel
+      return; // Exit function if user canceled prompt
+    } else if (remarks.trim() === '') { // Check if reason is empty
+      alert('Please enter a valid reject reason.'); // Alert if reason is invalid
+    }
+  }
+    setRejectReason(remarks);
     const headers={
       'Content-Type':'application/json',
       'Authorization':'Bearer '+token,
     }
-    axios.put(`${BASE_URL}/api/approveOrReject/${empId}`, { id:id,approve: false },{headers})
+    axios.put(`${BASE_URL}/api/approveOrReject/${empId}`, { id:id,approve: false,remarks: remarks },{headers})
       .then(response => {
         // Handle the response accordingly (update local state, show a message, etc.)
         // console.log('Request Rejected:', response.data);
